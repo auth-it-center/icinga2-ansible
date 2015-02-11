@@ -1,0 +1,4 @@
+---
+- include: icinga2_local_hosts_install.yml
+- include: icinga2_local_hosts_config.yml
+- include: icinga2_remote_hosts.yml

@@ -1,0 +1,10 @@
+- hosts: icinga_server_fqdn
+  user: ansible
+  sudo: True
+  vars_files:
+    - vars/distros/{{ ansible_distribution }}-{{ ansible_lsb.major_release }}.yml
+  tasks:
+    - include: tasks/icinga2/repo.yml              tags=icinga_repo
+    - include: tasks/apache/install.yml            tags=install_httpd
+    - include: tasks/mysql-server/install.yml      tags=install_mysql
+    - include: tasks/icinga2/install.yml           tags=install_icinga
