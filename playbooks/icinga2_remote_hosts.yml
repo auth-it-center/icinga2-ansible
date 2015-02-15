@@ -1,0 +1,16 @@
+- hosts: icinga
+  gather_facts: true
+  user: ansible
+  sudo: True
+  vars_files:
+    - vars/distros/{{ ansible_distribution }}-{{ ansible_lsb.major_release }}.yml
+
+  tasks:
+    - include: tasks/icinga2/remote_hosts_install.yml       tags=icinga_rhosts_install
+    - include: tasks/icinga2/remote_hosts_config.yml        tags=icinga_rhosts_config
+    - include: tasks/icinga2/remote_nrpe_config.yml         tags=icinga_nrpe_config
+
+  handlers:
+    - include: handlers/icinga.yml
+    - include: handlers/nrpe.yml
+
