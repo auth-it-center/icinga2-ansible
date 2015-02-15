@@ -1,0 +1,4 @@
+- name: Copy icinga-stable-release repo file
+  copy: src=files/etc/yum.repos.d/icinga-stable-release.repo
+        dest=/etc/yum.repos.d/icinga-stable-release.repo
+        owner=root group=root mode=0644
