@@ -1,0 +1,13 @@
+- name: Install Icinga2 
+  yum: name={{ item }} 
+       state=latest 
+       enablerepo=icinga-stable-release
+  with_items:
+    - icinga2
+    - icinga2-ido-mysql
+    - icinga2-classicui-config
+    - icinga-gui
+  
+- name: Install MySQL-python for ansible mysql module
+  yum: name=MySQL-python 
+       state=latest
