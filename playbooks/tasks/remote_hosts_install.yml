@@ -1,0 +1,13 @@
+############### Install NRPE/Nagios related packages ###############
+
+- name: Install nrpe server on remote hosts
+  yum: name={{ item }} state=latest enablerepo=epel
+  with_items: nrpe_slave
+  tags: install_nrpe
+  when: ansible_fqdn != "icinga_server_fqdn"
+
+- name: Install nagios plugins
+  yum: name={{ item.pkg }} state=latest enablerepo={{ item.repo }}
+  with_items: nagios_plugins
+  tags: install_nagios_plugins
+
