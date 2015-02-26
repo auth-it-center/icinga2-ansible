@@ -1,0 +1,153 @@
+############### Build icinga configs ###############
+
+- name: create tmp dirs
+  file: path={{ item }} 
+        state=directory 
+        mode=775 owner=root group=root
+  with_items: tmp_paths 
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: make_hosts
+  
+- name: create prod dirs
+  file: path={{ item }} 
+        state=directory 
+        mode=750 owner=icinga group=icinga
+  with_items: icinga2_prod_paths 
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: make_hosts
+  
+- name: cleanup tmp dir first
+  shell: rm -f {{ item }}
+  with_items:
+     - /tmp/ansible_hosts/hosts/hosts*
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: make_hosts
+  
+- name: build hosts.cfg
+  template: src=templates/etc/icinga2/hosts.cfg.j2 
+            dest=/tmp/ansible_hosts/hosts/hosts.conf.{{ ansible_fqdn }} 
+            mode=0664 owner=root group=root
+  delegate_to: icinga_server_fqdn
+  tags: make_hosts
+
+- name: assemble hosts.cfg
+  assemble: src=/tmp/ansible_hosts/hosts 
+            dest=/tmp/ansible_hosts/hosts/hosts.conf 
+            remote_src=True 
+            mode=664 owner=root group=root
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: make_hosts
+
+- name: delete tmp individual cfg files
+  shell: rm -f {{ item }} 
+  with_items: 
+     - /tmp/ansible_hosts/hosts/hosts.cfg.*
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: make_hosts
+    
+- name: copy host and service configs to icinga dir
+  shell: yes | cp /tmp/ansible_hosts/hosts/hosts.conf /etc/icinga2/conf.d/hosts.conf
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: make_hosts
+  notify: 
+    - check icinga2 configs
+
+- name: copy commands.conf
+  copy: src=files/etc/icinga2/conf.d/commands.conf 
+        dest=/etc/icinga2/conf.d/commands.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: commands
+  notify: 
+    - check icinga2 configs
+
+- name: copy apply_rules file
+  copy: src=files/etc/icinga2/apply_rules.conf 
+        dest=/etc/icinga2/conf.d/services.conf
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: apply_rules
+  notify: 
+    - check icinga2 configs
+
+- name: copy timeperiods.conf
+  copy: src=files/etc/icinga2/conf.d/timeperiods.conf 
+        dest=/etc/icinga2/conf.d/timeperiods.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: timeperiods
+  notify: 
+    - check icinga2 configs
+
+- name: copy users.conf
+  copy: src=files/etc/icinga2/conf.d/users.conf 
+        dest=/etc/icinga2/conf.d/users.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: users
+  notify: 
+    - check icinga2 configs
+
+- name: copy templates.cfg
+  copy: src=files/etc/icinga2/conf.d/templates.conf 
+        dest=/etc/icinga2/conf.d/templates.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: templates
+  notify: 
+    - check icinga2 configs
+
+- name: copy groups.conf
+  copy: src=files/etc/icinga2/conf.d/groups.conf 
+        dest=/etc/icinga2/conf.d/groups.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: groups
+  notify: 
+    - check icinga2 configs
+
+- name: copy host groups
+  template: src=templates/etc/icinga2/host.groups.cfg.j2 
+            dest=/etc/icinga2/conf.d/host.group.conf 
+            owner=icinga group=icinga mode=0640 
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: host_groups
+  notify: 
+    - check icinga2 configs
+  
+- name: copy constants file
+  copy: src=files/etc/icinga2/constants.conf 
+        dest=/etc/icinga2/constants.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: constants
+  notify: 
+    - check icinga2 configs
+
+- name: copy downtimes file
+  copy: src=files/etc/icinga2/conf.d/downtimes.conf 
+        dest=/etc/icinga2/conf.d/downtimes.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: downtimes
+  notify: 
+    - check icinga2 configs
+
+- name: copy satellite file
+  copy: src=files/etc/icinga2/conf.d/satellite.conf 
+        dest=/etc/icinga2/conf.d/satellite.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: satellite
+  notify: 
+    - check icinga2 configs
+
+- name: copy notifications file
+  copy: src=files/etc/icinga2/conf.d/notifications.conf 
+        dest=/etc/icinga2/conf.d/notifications.conf 
+        owner=icinga group=icinga mode=0640
+  when: ansible_fqdn == "icinga_server_fqdn"
+  tags: notifications
+  notify: 
+    - check icinga2 configs
+
