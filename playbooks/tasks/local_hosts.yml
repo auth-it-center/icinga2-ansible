@@ -1,0 +1,24 @@
+- name: copy sensors.cfg
+  copy: src=files/etc/icinga2/conf.d/sensors/sensors.conf 
+        dest=/etc/icinga2/conf.d/sensors/sensors.conf 
+        owner=icinga group=icinga mode=0640
+  tags: sensors
+  notify:
+    - check icinga2 configs
+
+- name: copy sensors host group
+  copy: src=files/etc/icinga2/conf.d/sensors/sensors.group.conf 
+        dest=/etc/icinga2/conf.d/sensors/sensors.group.conf 
+        owner=icinga group=icinga mode=0640
+  tags: sensors
+  notify:
+    - check icinga2 configs
+
+- name: copy custom hosts hosts.cfg
+  copy: src=files/etc/icinga2/conf.d/custom_hosts/hosts.conf
+        dest=/etc/icinga2/conf.d/custom_hosts/hosts.conf 
+        owner=icinga group=icinga mode=0640
+  tags: custom_hosts
+  notify:
+    - check icinga2 configs
+
