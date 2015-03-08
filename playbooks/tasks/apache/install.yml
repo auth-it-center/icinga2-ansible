@@ -1,0 +1,5 @@
+- name: Install Apache HTTP Server
+  yum: name=httpd state=latest
+
+- name: Enable Apache HTTP Server
+  service: name=httpd enabled=yes state=started
