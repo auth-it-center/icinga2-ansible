@@ -1,0 +1,5 @@
+- name: Install MySQL server
+  yum: name=mysql-server state=latest
+
+- name: Enable MySQL service at boot
+  service: name=mysqld enabled=on
