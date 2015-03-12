@@ -1,0 +1,17 @@
+- name: configure nrpe user on each remote host
+  lineinfile: dest="/etc/nagios/nrpe.cfg"
+              regexp='nrpe_user=[a-z0-9_-]{3,15}$'
+              line='nrpe_user=nrpe'
+              state=present
+  when: ansible_fqdn != "icinga_server_fqdn"
+  tags: config_nrpe
+  notify: restart NRPE
+
+- name: configure nrpe group on each remote host
+  lineinfile: dest="/etc/nagios/nrpe.cfg"
+              regexp='nrpe_group=[a-z0-9_-]{3,15}$'
+              line='nrpe_group=nrpe'
+              state=present
+  when: ansible_fqdn != "icinga_server_fqdn"
+  tags: config_nrpe
+  notify: restart NRPE
