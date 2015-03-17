@@ -2,7 +2,11 @@
   yum: name=mysql-server state=latest
 
 - name: MySQL server - Enable innodb_file_per_table variable
-  action: lineinfile destfile="/etc/my.cnf" regexp="innodb_file_per_table" value="innodb_file_per_table" state=present insertafter="\[mysqld\]"
+  lineinfile: dest="/etc/my.cnf"
+              regexp="innodb_file_per_table"
+              value="innodb_file_per_table"
+              state=present
+              insertafter="\[mysqld\]"
   
 - name: Enable MySQL service at boot
   service: name=mysqld enabled=on
