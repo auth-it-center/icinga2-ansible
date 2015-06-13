@@ -1,0 +1,27 @@
+########## vars for the remote_hosts_config tasks ##########
+tmp_paths:
+  - /tmp/ansible_hosts/
+  - /tmp/ansible_hosts/hosts
+  - /tmp/ansible_hosts/services
+
+########## Icinga2 MySQL options ##########
+icinga_user_mysql_pass: change_me
+icinga_root_mysql_pass: chenge_me
+icinga_mysql_host: localhost
+icinga2_ido_mysql_schema: /usr/share/icinga2-ido-mysql/schema/mysql.sql
+
+########## icinga.cfg service configs (template icinga.cfg.j2) ##########
+icinga2_cfg_path: /etc/icinga2/
+
+########## List of plugins that will be installed on monitored hosts ##########
+nagios_plugins:
+  - { pkg: nagios-plugins-disk,       repo: epel }
+  - { pkg: nagios-plugins-load,       repo: epel }
+  - { pkg: nagios-plugins-nrpe,       repo: epel }
+  - { pkg: nagios-plugins-procs,      repo: epel }
+  - { pkg: nagios-plugins-openmanage, repo: epel }
+  - { pkg: nagios-plugins,            repo: epel }
+  - { pkg: nagios-plugins-ntp,        repo: epel }
+
+nrpe_slave:
+  - nagios-nrpe
