@@ -1,0 +1,12 @@
+{% for hgr in groups %}
+{% set hostgroup = [] %}
+
+object HostGroup "{% do hostgroup.append( hgr ) %}{{ hostgroup|replace("[","")|replace("]","")|replace("'","") }}" {
+  display_name = "{{ hostgroup|replace("[","")|replace("]","")|replace("'","") }}"
+}
+
+{% endfor %}
+
+object HostGroup "non-ansible" {
+  display_name = "non-ansible"
+}
